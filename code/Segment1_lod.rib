@@ -1,0 +1,11 @@
+AttributeBegin
+	Detail [-2 2 -12 2 -2 2]
+	DetailRange [ 1 1 600 3000 ]
+		Procedural "DelayedReadArchive" ["RIB_Archive/Segment1_level0.rib"] [-2 2 -12 2 -2 2]
+	DetailRange [600 3000 10000 25000]
+		Procedural "DelayedReadArchive" ["RIB_Archive/Segment1_level1.rib"] [-2 2 -12 2 -2 2]
+	DetailRange [10000 25000 100000 300000]
+		Procedural "DelayedReadArchive" ["RIB_Archive/Segment1_level2.rib"] [-2 2 -12 2 -2 2]
+	DetailRange [100000 300000 30000000 40000000]
+		Procedural "DelayedReadArchive" ["RIB_Archive/Segment1_level3.rib"] [-2 2 -12 2 -2 2]
+AttributeEnd

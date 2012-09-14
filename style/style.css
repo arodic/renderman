@@ -1,0 +1,34 @@
+@charset "UTF-8";
+/* CSS Document */
+* { margin:0; padding:0; border:0; color:#fff;}
+a { text-decoration:none;}
+body { background: url(../images/main_background.png); font-size:14px; font-family:"Courier New", Courier, monospace;}
+h1, h2, h3, h4, h5 {  margin:4px 8px;}
+h1 { font-size:20px; font-weight:normal;;}
+h2 { font-size:16px; font-weight:normal;}
+h3 { font-size:13px; font-weight:normal;}
+h4 { font-size:11px; font-weight:normal;}
+#wrapper { width:800px; height:627px; margin:auto; background:url(../images/static_background.jpg); overflow-x:hidden; overflow-y:scroll;}
+#scroll { width:800px; background: url(../images/transparent_background.png);}
+#header { width:800px; margin:auto; margin-top:2px; font-size:15px;}
+#footer { width:800px; margin:auto; font-size:16px;}
+
+.scad {font-family: Georgia, "Times New Roman", Times, serif; font-size:20px; margin:0 0 0 8px;}
+
+.short { float:left; width:380px; height:196px; margin:8px 0 3px 8px; background:url(../images/dim.png);}
+.short_intro { float:left; width:380px; height:196px; margin:8px 0 3px 8px;}
+
+.container { float:left; width:750px; margin:4px 0 4px 8px; padding:8px 8px; background:url(../images/dim.png); text-align:justify;}
+.half_container  { float:left; width:360px; margin:4px 0 4px 8px; padding:8px 9px; background:url(../images/dim.png);}
+.third_container  { float:left; width:232px; margin:4px 0 4px 8px; padding:8px 9px; background:url(../images/dim.png);}
+.grey{ color: #777;}
+.comment{ color: #FFCC00;}
+.short img { float:left; margin-right:8px;}
+
+.small { font-size:11px; padding:0 8px; color:#CCC;}
+.code { background:url(../images/dim.png); color:#FFF; font-weight:normal; font-size:13px; float:left; padding:8px; line-height:13px; margin-right:8px;}
+
+.left { float:left;}
+.right { float:right;}
+
+div.both{ clear:both; }

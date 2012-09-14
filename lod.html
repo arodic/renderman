@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script language="javascript" type="text/javascript">
+function closeWindow() {
+   window.open('','_parent','');
+   window.close();
+}
+</script> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Aleksandar Rodić - Renderman Portfolio - Level of Detail - Winter Quarter @ SCAD 2009 - Prof. Malcolm Kesson</title>
+<link href="style/style.css" rel="stylesheet" type="text/css" />
+<meta content="Aleksandar, Rodic, renderman, portfolio, 3d, design, modeling, programing, Savannah, collage, art, malcolm, kesson, rendering, render, model, texture, procedure, script, maya, image," name="keywords" />
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-258449-38");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</head>
+<body>
+        <div id="header">
+          <a href="index.html" target="_self">WorldBegin</a>&nbsp;&nbsp;&nbsp;
+          <a href="matrix.html" target="_self">MatrixComp</a>&nbsp;&nbsp;&nbsp;
+          <a href="lod.html" target="_self">LevelOfDetail</a>&nbsp;&nbsp;&nbsp;
+          <a href="st.html" target="_self">StColoration</a>&nbsp;&nbsp;&nbsp;
+          <a href="pattern.html" target="_self">PatternAnim</a>&nbsp;&nbsp;&nbsp;
+          <a href="fire.html" target="_self">Fire</a>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div id="wrapper">
+            <div id="scroll">
+              <a href="matrix.html" target="_self"><h1>Level of Detail</h1></a>
+              <div class="container">
+                  <p>The animations on this page demonstrate the support offered by RenderMan for level-of-detail (LOD). Three models of a short length of Spanish Moss (Tillandsia Usneoides) were made in Maya. Using LOD the renderer selects the appropriate model to render based on the area of screen space occupied by the model. </p>
+              </div>
+              <div class="container">
+              <div class="left" style="width:308px; height:158px; margin-right:8px;">
+              <a href="images/reference_moss2.jpg"><img src="images/reference_moss2_thumb.jpg" alt="spanish moss reference image" width="150" height="150" class="left" style="margin-bottom:8px;margin-right:8px;"/></a>
+              <a href="images/reference_moss3.jpg"><img src="images/reference_moss3_thumb.jpg" alt="spanish moss reference image" width="150" height="150" class="left"  style="margin-bottom:8px;"/></a></div>
+                <p>These reference photos are showing what I have tried to acheve in this project. The biggest challenge was to generate and render the huge amount of geometry as seen on the second image. The first part of the modeling was to create several varioations of moss strings and several levels of detail for each of them.</p>
+              </div>
+              <div class="container">
+              <div style=" float:left; width:320px; margin-right:8px">
+              <a href="images/modeling_moss_1.jpg"><img src="images/modeling_moss_1_thumb.jpg" alt="spanish moss reference image" width="150" height="150" class="left" style="margin-bottom:8px; margin-right:12px;"/></a><a href="images/modeling_moss_3.jpg"><img src="images/modeling_moss_3_thumb.jpg" alt="spanish moss reference image" width="150" height="150" class="left"/></a>           		</div>
+                <p><strong>Modeling</strong> was done using curves and paint effect brushes (tubes) applied to curves. Tube width, sample rate and number of segments are attached to custom control attributes of a main curve. Local width of the tubes is controlled with spherical modifiers which are parented to the curves. Also, individual branching groups (flowers) are attached to the main curve using motion path. Each motion path has only one key-frame. That makes each group fixed in a position on the curve. Also, another group is used for rotation of the curves with another custom attribute. I have chosen this technique for easier modelling of the different variations of the moss. Also, sample rate and segment controls tured out to be an easy way to create different levels of details.</p>
+              </div>
+              <div class="container">
+                  <p><img src="images/moss_wip_anim.gif" alt="python procedural modeling demonstration" width="232" height="232" class="left" style="margin-right:8px;" />After making 10 variations of a moss string, I made a python script for procedural generation of moss clumps. The script takes four parameters (<strong>lenght</strong>, <strong>width</strong>, <strong>density</strong> and <strong>seed</strong>)and gives a rib output with multiple archives of the previously modelled strings. Each archive has &quot;detail&quot; statements with multiple rib files for each string. Later on, these archives will be used instead of proxy objects in Maya scene.</p>
+                  <p>The image on the left shows some of the results made during coding stage. During this process I had many problems with python compatibility with Maya and Renderman but I managed to work it out. If you are interested, you can look at the <a href="code/moss_gen.py"><u>code here</u></a>.</p>
+              </div>
+            <div class="container">
+                  <p>Rendering huge amounts of spanish moss would be impossible without LOD (level of detail) optimization. That is a technique that substitutes a model with a simpler one when it gets far enough. Cross-dissolve transition between the two models makes the switching smooth. I have used procedural DelayedReadArchive instead of regular ReadArcive because in significantly reduces pre-render and overall render time. The images below show render times with and without LOD optimization. <a href="code/Segment1_lod.rib"><u>Here is the rib archive</u></a> with lod statements.</p>
+              </div>
+              
+              <div class="third_container">
+                <p><a href="images/lod_moss_level1" target="_blank"><img src="images/lod_moss_level1_thumb" alt="Moss Level of Detail instance copy 3000 Rendering Renderman Level of Detail - Take that Google!" width="232" height="232" class="left" /></a>
+                3000 copies<br />
+                Level 1 (curves)<br />
+                Pre-render: <strong>16 sec.</strong></p>
+                <p>Render time: <strong>9 sec.</strong></p>
+              </div>
+              <div class="third_container">
+                <a href="images/lod_moss_level2" target="_blank"><img src="images/lod_moss_level2_thumb" alt="Moss Level of Detail instance copy 3000 Rendering Renderman Level of Detail - Take that Google!" width="232" height="232" class="left" /></a>
+         	    <p>3000 copies<br />
+         	      Level 2 (low poly)<br />
+         	      Pre-render: <strong>3 min. 20 sec.</strong></p>
+         	    <p>Render time: <strong>1 min. 3sec.</strong></p>
+              </div>
+              <div class="third_container">
+                <a href="images/lod_moss_lod" target="_blank"><img src="images/lod_moss_lod_thumb" alt="Moss Level of Detail instance copy 3000 Rendering Renderman Level of Detail - Take that Google!" width="232" height="232" class="left" /></a>
+                <p>3000 copies<br />
+         	      LOD (4 levels)<br />
+         	      Pre-render: <strong>10 min. 46 sec.</strong></p>
+         	    <p>Render time: <strong>26sec.</strong></p>
+              </div>              
+              <div class="both"></div>
+
+              <div class="container">
+                  <p><a href="images/shadow_test.jpg"><img src="images/shadow_test_thumb.jpg" alt="shadow, raytrace, curves, spanish moss. lod, lighting, light" width="232" height="232" class="left" style="margin-right:8px;" /></a><img src="images/juxtaposition_thumb.jpg" alt="proxy juxtaposition spanish moss" width="232" height="232" class="right" style="margin-left:8px;" />This image shows first material and lighting tests. If you look closely to the reference images above, you will notice that the inside parts of the moss clumps are darker than the outside. It is because the light cant go trough. One of the ways to achieve this with renderman is to use shadows. I prefer raytrace shadows because it gives much more precise results. By tuning shadow color and light source radius (angle) we can the adjust effect.</p>
+              </div>
+
+            <div class="container">
+                  <p>&nbsp;</p>
+              </div>
+
+          </div>
+        </div>
+        <div id="footer">
+        	<p class="left"><a href="javascript: alert('Division by zero!')" target="_self">WorldEnd</a></p>
+            <p class="right">Copyright &copy; 2009 <a href="http://aleksandarrodic.com/">Aleksandar Rodić</a></p>
+        </div>
+<img src="http://aleksandarrodic.com:8440/tracking.gif"/>
+</body>
+</html>

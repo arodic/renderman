@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script language="javascript" type="text/javascript">
+function closeWindow() {
+   window.open('','_parent','');
+   window.close();
+}
+</script> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Aleksandar Rodić - Renderman Portfolio - ST Coloration - Winter Quarter @ SCAD 2009 - Prof. Malcolm Kesson</title>
+<link href="style/style.css" rel="stylesheet" type="text/css" />
+<meta content="Aleksandar, Rodic, renderman, portfolio, 3d, design, modeling, programing, Savannah, collage, art, malcolm, kesson, rendering, render, model, texture, procedure, script, maya, image," name="keywords" />
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-258449-38");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</head>
+<body>
+        <div id="header">
+          <a href="index.html" target="_self">WorldBegin</a>&nbsp;&nbsp;&nbsp;
+          <a href="matrix.html" target="_self">MatrixComp</a>&nbsp;&nbsp;&nbsp;
+          <a href="lod.html" target="_self">LevelOfDetail</a>&nbsp;&nbsp;&nbsp;
+          <a href="st.html" target="_self">StColoration</a>&nbsp;&nbsp;&nbsp;
+          <a href="pattern.html" target="_self">PatternAnim</a>&nbsp;&nbsp;&nbsp;
+          <a href="fire.html" target="_self">Fire</a>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div id="wrapper">
+            <div id="scroll">
+              <a href="matrix.html" target="_self">
+              <h1>Pattern Animation</h1>
+              </a>
+              <embed src="videos/Pong_final.mov" width="750" height="436" autoplay="false" controller="true" loop="False" style="margin:0 15px;" > </embed>
+        <div class="container">
+                  <p>
+                    <embed src="videos/pong_simulation.mov" width="240" height="254" AUTOPLAY=false CONTROLLER=true LOOP=true  class="left" style=" margin-right:8px;"> </embed>
+                    <img src="images/rigid_settings.jpg" alt="rigid body dynamics settings" width="324" height="112" class="right" style="margin-left:8px;" />The animation and notes on this page explain how custom shaders written in the RenderMan Shading Language can be animated using Maya. As I mentioned on <a href="st.html"><u>StColoration page</u></a>, I wanted to animate shader with data from dynamic simulation in Maya. Simulation includes 4 passive and one active rigid body. There is no friction between them and they have bounciness value of 1. With these settings, the initial speed of the ball is constant and the simulation can run indefinitely. The crucial part of the simulation is behavior of the players. For this purpose I made a simple algorithm in a single line of MEL code. The behavior is controlled by the position of the ball and a noise function.
+                  As shown in the following code, the player's position is driven by Y position of the ball when the ball is closest to the player. When the ball is furthest, on the other hand, position of the player is function of noise and time.</p>
+                <div class="code" style="width:730px; margin:4px; margin-left:0;">
+                    <p><strong>player2_move.translateY=</strong><br />
+                      ball.translateY*(-(ball.translateZ-4.8)/10)+(noise(time)/2)*(ball.translateZ-4.8);</p>
+                    <p><strong>player1_move.translateY=</strong><br />
+                      ball.translateY*(-(-ball.translateZ-4.8)/10)+(noise(time+1000)/2)*(-4.8+ball.translateZ</p>
+                </div>
+                  <p><br />
+                  </p>  
+                  <p>                To make the transition from one behavior to another gradual, I multiplied each behavior with opposite value of the ball's Z position relative to the distance between the players. To make behaviors of the two players off-sync I added 1000 to player's one time in noise function.</p>
+              </div>
+              <div class="container">
+                <p>
+                  <embed src="videos/Pong_preview.mov"  autoplay="false" controller="true" loop="True"  width="320" height="194" class="left" style="margin-right:8px;"> </embed>
+                This video shows the development of the shader. At the beginning, there was only constant value output. Then, I added diffuse and specular component. And lastly, I made the white pixels constant because I wanted them to appear like light emitters. Also, at the end of this video you can see the results of the first experiments with the raster and analog video interference effect.<a href="code/pong.sl"> You can <u>download the shader here</u>.</a> <a href="code/pong.sl">Detailed explanation of the &quot;pong screen shader&quot; fallows.</a> parts of the shader explined in the StColoration page are grayed ot.</p>
+              </div>
+              <div class="container" style=" text-align:left;">
+                <p class="comment">//Basic Shader Declarations</p>
+                <p>surface pong(	<span class="grey">float	Kd = 0.6, /* [0 10]*/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ks = 0.8, /* [0 10]*/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;roughness = 0.1,</span><br />
+  <span class="grey">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player1 = 0.5, /* [0 1]*/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player2 = 0.2, /* [0 1]*/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ballY = 0.5, /* [0 1]*/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ballX = 0.2, /* [0 1]*/</span><br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;offset = 0, /* [-1 1]*/ <span class="comment">/* shifts the entire image up and down */</span><br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;freq1 = 0, /* [0 1000 1]*/ <span class="comment">/* freq1 for sine interference */</span><br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;freq2 = 0, /* [0 1000 1]*/ <span class="comment">/* freq2 for sine interference */</span><br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;freq3 = 0, /* [0 1000 1]*/ <span class="comment">/*  freq3 for sine interference */</span><br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amplitude = 0, /* [0 100]*/ <span class="comment">/* amp for sine interference */</span><br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;separation = 1, /* [0 1] */ <span class="comment">/* rgb raster/constant white blending*/</span><br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;noiselevel = 1, /* [0 1] */ <span class="comment">/* the ammount of noise */</span><br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frame = 0; <span class="comment">/* used for noise animation */</span><br />
+  <span class="grey">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color	hiliteColor = 1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;surfColor = 0)</span><br />
+                  {<br />
+                                </p>
+                <p><span class="grey">color surfcolor = surfColor;<br />
+                normal	n = normalize(N);<br />
+                normal  nf = faceforward(n, I); </span><br />
+                  float si = (s); <span class="comment">/* creates secondary st space for image distorsion */</span><br />
+                  float ti = (t);</p>
+                <p><span class="comment">//INETFERENCE OFSET adds vertical ofset and repeats cropped content from the othe edge</span><br />
+                  ti = ti + offset;<br />
+                  if (ti &gt;= 1)<br />
+                  ti = ti - 1;<br />
+                  if (ti &lt;= 0)<br />
+                ti = ti + 1;</p>
+                <p><span class="comment">//INETFERENCE SINE adds sine horizntal ofset and repeats the content as above</span><br />
+                  si = si + amplitude*(sin(t*freq1-1)+sin(t*freq2-2)+sin(t*freq3-3));<br />
+                  if (si &gt;= 1)<br />
+                  si = si-1;<br />
+                  if (si &gt;= 1)<br />
+                  si = si - 1;<br />
+                  if (si &lt;= 0)<br />
+                si = si + 1;</p>
+                <p><span class="comment">//Generates noise and sets the level</span><br />
+                float	whitenoise = noise(round((si+200*frame)*250)+0.5, round(((ti+1000*frame)+0.004)*200))*noiselevel;</p>
+                <p><span class="grey">//left paddle</span><br />
+                  <span class="grey">if(si &gt;= 0.03 &amp;&amp; si &lt;= 0.05 &amp;&amp; ti &gt;= player1-0.07 &amp;&amp; ti &lt;= player1+0.07)<br />
+                surfcolor = color(1,1,1);</span></p>
+                <p class="grey">//right paddle<br />
+  if(si &gt;= 0.95 &amp;&amp; si &lt;= 0.97 &amp;&amp; ti &gt;= player2-0.07 &amp;&amp; ti &lt;= player2+0.07)<br />
+                surfcolor = color(1,1,1);</p>
+                <p class="grey">//ball<br />
+  if(si &gt;= ballX-0.015 &amp;&amp; si &lt;= ballX+0.015 &amp;&amp; ti &gt;= ballY-0.015 &amp;&amp; ti &lt;= ballY+0.015)<br />
+                surfcolor = color(1,1,1);</p>
+                <p class="grey">//middle line<br />
+  if(si &gt;= 0.49 &amp;&amp; si &lt;= 0.51 &amp;&amp; ti &gt;= 0.04 &amp;&amp; ti &lt;= 0.96)<br />
+                surfcolor = color(1,1,1);</p>
+                <p class="grey">//border<br />
+                float loop;<br />
+                for (loop = 0.01; loop &lt;= 1; loop += 0.04)<br />
+                {<br />
+                if((si &gt;= loop &amp;&amp; si &lt;= loop+0.02)&amp;&amp;(ti &gt;= 0.96 &amp;&amp; ti &lt;= 0.98 || ti &gt;= 0.02 &amp;&amp; ti &lt;= 0.04))<br />
+                surfcolor = color(1,1,1);<br />
+                }</p>
+                <p class="grey">//Zero<br />
+                float zeroPosX = 0.4;<br />
+                float zeroPosY = 0.15;<br />
+                if(si &gt;= zeroPosX-0.04 &amp;&amp; si &lt;= zeroPosX+0.04 &amp;&amp; ti &gt;= zeroPosY-0.06 &amp;&amp; ti &lt;= zeroPosY+0.06)<br />
+                surfcolor = color(1,1,1);<br />
+                if(si &gt;= zeroPosX-0.02 &amp;&amp; si &lt;= zeroPosX+0.02 &amp;&amp; ti &gt;= zeroPosY-0.05 &amp;&amp; ti &lt;= zeroPosY+0.05)<br />
+                surfcolor = surfColor;</p>
+                <p class="grey">//Zero<br />
+                zeroPosX = 0.65;<br />
+                zeroPosY = 0.15;<br />
+                if(si &gt;= zeroPosX-0.04 &amp;&amp; si &lt;= zeroPosX+0.04 &amp;&amp; ti &gt;= zeroPosY-0.06 &amp;&amp; ti &lt;= zeroPosY+0.06)<br />
+                surfcolor = color(1,1,1);<br />
+                if(si &gt;= zeroPosX-0.02 &amp;&amp; si &lt;= zeroPosX+0.02 &amp;&amp; ti &gt;= zeroPosY-0.05 &amp;&amp; ti &lt;= zeroPosY+0.05)<br />
+                surfcolor = surfColor;</p>
+                <p class="grey">// diffuse component<br />
+                color diffusecolor = 1;<br />
+                if (surfcolor != color(1,1,1)){<br />
+                color diffusecolor = diffuse(nf) * Kd * surfcolor;<br />
+                }</p>
+                <p><span class="comment">// Adds noise and/or removes fill depending on noise level</span><br />
+                  surfcolor = surfcolor*(1-noiselevel)+whitenoise;<br />
+                </p>
+                <p class="comment">//Stripes - generates color variation based on s(si) value in steps of 0.001</p>
+                <p class="comment">//step size determens the width and number of the pixels</p>
+                <p>for (loop = 0.00; loop &lt;= 1; loop += 0.004)<br />
+                  {<br />
+                  if(si &gt;= loop &amp;&amp; si &lt;= loop+0.001)<br />
+                  <span class="comment">/* pay attention how separation variable blends white and rgb pixels in this loop*/</span><br />
+                  surfcolor = surfcolor * (1, separation, separation);<br />
+                  if(si &gt;= loop+0.001 &amp;&amp; si &lt;= loop+0.002)<br />
+                  surfcolor = surfcolor * (separation, 1, separation);<br />
+                  if(si &gt;= loop+0.002 &amp;&amp; si &lt;= loop+0.003)<br />
+                  surfcolor = surfcolor * (separation, separation, 1);<br />
+                  if(si &gt;= loop+0.003 &amp;&amp; si &lt;= loop+0.004)</p>
+                <p><span class="comment">/* previous line generates black pixel every 4th vertical line if separation variable is 0 */</span><br />
+                  surfcolor = surfcolor*(separation);<br />
+                  } </p>
+                <p>for (loop = 0.00; loop &lt;= 1; loop += 0.005)<br />
+                  {<br />
+                  if(ti &gt;= loop+0.003 &amp;&amp; ti &lt;= loop+0.004)</p>
+                <p><span class="comment">/* next line generates black pixel every 2nd horizontal line if separation variable is 0 */</span><br />
+                  surfcolor = surfcolor*(separation);<br />
+                  } <br />
+                  <span class="comment">/* if you have any quetions feel free to email me */</span></p>
+                <p><span class="comment">/* and have a nice day */</span><span class="grey"><br />
+                // specular component<br />
+                vector i = normalize(-I);<br />
+                color speccolor = specular(nf, i, roughness) * hiliteColor * Ks; </span></p>
+                <p>&nbsp;</p>
+                <p class="grey">//Final color output</p>
+                <p><span class="grey">Oi = Os;<br />
+                  Ci = Oi * Cs * surfcolor * (diffusecolor + speccolor) + speccolor;</span><br />
+                  }</p>
+              </div>
+              <div class="container" style=" text-align:left;">
+                <embed src="videos/Pong_color_test.mov" width="320" height="194" AUTOPLAY=false CONTROLLER=true LOOP=true  class="left" style=" margin-right:8px;"></embed>
+                In this video I tried to demonstrate how rgb colors are mixed to create white. Shading rate is cruicial for this to work. This animation shows the change of shading rate from 10 to 0.01 and back to 10.
+              </div>
+          </div>
+        </div>
+        <div id="footer">
+        	<p class="left"><a href="javascript: alert('Division by zero!')" target="_self">WorldEnd</a></p>
+            <p class="right">Copyright &copy; 2009 <a href="http://aleksandarrodic.com/">Aleksandar Rodić</a></p>
+        </div>
+<img src="http://aleksandarrodic.com:8440/tracking.gif"/>
+</body>
+</html>

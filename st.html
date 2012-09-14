@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script language="javascript" type="text/javascript">
+function closeWindow() {
+   window.open('','_parent','');
+   window.close();
+}
+</script> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Aleksandar Rodić - Renderman Portfolio - ST Coloration - Winter Quarter @ SCAD 2009 - Prof. Malcolm Kesson</title>
+<link href="style/style.css" rel="stylesheet" type="text/css" />
+<meta content="Aleksandar, Rodic, renderman, portfolio, 3d, design, modeling, programing, Savannah, collage, art, malcolm, kesson, rendering, render, model, texture, procedure, script, maya, image," name="keywords" />
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-258449-38");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</head>
+<body>
+        <div id="header">
+          <a href="index.html" target="_self">WorldBegin</a>&nbsp;&nbsp;&nbsp;
+          <a href="matrix.html" target="_self">MatrixComp</a>&nbsp;&nbsp;&nbsp;
+          <a href="lod.html" target="_self">LevelOfDetail</a>&nbsp;&nbsp;&nbsp;
+          <a href="st.html" target="_self">StColoration</a>&nbsp;&nbsp;&nbsp;
+          <a href="pattern.html" target="_self">PatternAnim</a>&nbsp;&nbsp;&nbsp;
+          <a href="fire.html" target="_self">Fire</a>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div id="wrapper">
+            <div id="scroll">
+              <a href="matrix.html" target="_self">
+              <h1>ST Coloration</h1>
+              </a>
+              <div class="container">These images show the results of using the RenderMan Shading Language (RSL) to write a variety of special effects surface shaders. The notes and RSL code accompanying each image explain how each effect was achieved.              </div>
+              <div class="container">
+                <p>
+                  <embed src="videos/custom_st.mov" width="240" height="197" autoplay="false" loop="True" class="left" style="margin:0 8px"></embed>
+                </p>
+                <p>This is my custom st shader. I made it with four positioning variables in order to make animation easier.   These variables are: Y coordinates for each of the players and X and Y coordinates for the ball. Shaded areas are drawn with <strong>if</strong> statements in <strong>RSL</strong> containing several conditions and appropriate Boolean operators. This simple animation loop is created with key-frames in Cutter. Final animation in the next assignment, however, is going to be attached to a rigid body simulation in Maya. This will allow me to create animation similar to the real game. One part of the code is explained below. The whole code for the shader is available <a href="code/custom.sl"><u>here</u></a>.</p>
+              </div>
+              <p>&nbsp;</p>
+              <div class="container">
+                <p><span class="comment">//left paddle - fixed vertical width, horizontal dependent on player1 variable</span><br />
+  if(s &gt;= 0.03 &amp;&amp; s &lt;= 0.05 &amp;&amp; t&gt;= player1-0.07 &amp;&amp; t&lt;= player1+0.07)<br />
+surfcolor = color(1,1,1);</p>
+                <p><span class="comment">//right paddle - same as previous but opposite side and uses player2 variable</span><br />
+                  if(s &gt;= 0.95 &amp;&amp;s&lt;= 0.97 &amp;&amp; t&gt;= player2-0.07 &amp;&amp; t&lt;= player2+0.07)<br />
+                surfcolor = color(1,1,1);</p>
+                <p><span class="comment">//ball - reads ballx and bally variables and draws the ball</span><br />
+                  if(s&gt;= ballX-0.015 &amp;&amp;s&lt;= ballX+0.015 &amp;&amp; t&gt;= ballY-0.015 &amp;&amp; t&lt;= ballY+0.015)<br />
+                surfcolor = color(1,1,1);</p>
+                <p><span class="comment">//middle line</span><br />
+                  if(s&gt;= 0.49 &amp;&amp;s&lt;= 0.51 &amp;&amp; t&gt;= 0.04 &amp;&amp; t&lt;= 0.96)<br />
+                surfcolor = color(1,1,1);</p>
+                <p><span class="comment">//border - This loop draws a little cube every 0.04 units</span><br />
+                  float loop;<br />
+                  for (loop = 0.01; loop &lt;= 1; loop += 0.04)<br />
+                  {<br />
+                  if((s&gt;= loop &amp;&amp;s&lt;= loop+0.02)&amp;&amp;(t&gt;= 0.96 &amp;&amp; t&lt;= 0.98 || t&gt;= 0.02 &amp;&amp; t&lt;= 0.04))<br />
+                  surfcolor = color(1,1,1);<br />
+                }</p>
+                <p><span class="comment">//Zero - draws a solid rectangle then background color inside</span><br />
+                  float zeroPosX = 0.4;<br />
+                  float zeroPosY = 0.15;<br />
+                  if(s&gt;= zeroPosX-0.04 &amp;&amp;s&lt;= zeroPosX+0.04 &amp;&amp; t&gt;= zeroPosY-0.06 &amp;&amp; t&lt;= zeroPosY+0.06)<br />
+                  surfcolor = color(1,1,1);<br />
+                  if(s&gt;= zeroPosX-0.02 &amp;&amp;s&lt;= zeroPosX+0.02 &amp;&amp; t&gt;= zeroPosY-0.05 &amp;&amp; t&lt;= zeroPosY+0.05)<br />
+                surfcolor = backcolor;</p>
+                <p><span class="comment">//Zero - same as previous but different positioning coordinates</span><br />
+                  zeroPosX = 0.65;<br />
+                  zeroPosY = 0.15;<br />
+                  if(s &gt;= zeroPosX-0.04 &amp;&amp;s&lt;= zeroPosX+0.04 &amp;&amp; t&gt;= zeroPosY-0.06 &amp;&amp; t&lt;= zeroPosY+0.06)<br />
+                  surfcolor = color(1,1,1);<br />
+                  if(s &gt;= zeroPosX-0.02 &amp;&amp;s&lt;= zeroPosX+0.02 &amp;&amp; t&gt;= zeroPosY-0.05 &amp;&amp; t&lt;= zeroPosY+0.05)<br />
+                surfcolor = backcolor;</p>
+              </div>
+              <p>&nbsp;</p>
+              <div class="container">
+                  <p><a href="images/st_test.gif"><img src="images/st_test_thumb.gif" alt="ST coloration. renderman surface shading" style="margin:0 8px;" class="left" /></a></p>
+                <p>The shapes on the left are created with simple  conditions and Boolean operators similar as in my custom shader. This was an introductory assignment with purpose to introduce the concepts of st coloration and Renderman Shading Language.</p>
+              </div>
+          </div>
+        </div>
+        <div id="footer">
+        	<p class="left"><a href="javascript: alert('Division by zero!')" target="_self">WorldEnd</a></p>
+            <p class="right">Copyright &copy; 2009 <a href="http://aleksandarrodic.com/">Aleksandar Rodić</a></p>
+        </div>
+<img src="http://aleksandarrodic.com:8440/tracking.gif"/>
+</body>
+</html>

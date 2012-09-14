@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script language="javascript" type="text/javascript">
+function closeWindow() {
+   window.open('','_parent','');
+   window.close();
+}
+</script> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Aleksandar Rodić - Renderman Portfolio - Matrix Composition - Winter Quarter @ SCAD 2009 - Prof. Malcolm Kesson</title>
+<link href="style/style.css" rel="stylesheet" type="text/css" />
+<meta content="Aleksandar, Rodic, renderman, portfolio, 3d, design, modeling, programing, Savannah, collage, art, malcolm, kesson, rendering, render, model, texture, procedure, script, maya, image," name="keywords" />
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-258449-38");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</head>
+<body>
+        <div id="header">
+          <a href="index.html" target="_self">WorldBegin</a>&nbsp;&nbsp;&nbsp;
+          <a href="matrix.html" target="_self">MatrixComp</a>&nbsp;&nbsp;&nbsp;
+          <a href="lod.html" target="_self">LevelOfDetail</a>&nbsp;&nbsp;&nbsp;
+          <a href="st.html" target="_self">StColoration</a>&nbsp;&nbsp;&nbsp;
+          <a href="pattern.html" target="_self">PatternAnim</a>&nbsp;&nbsp;&nbsp;
+          <a href="fire.html" target="_self">Fire</a>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div id="wrapper">
+            <div id="scroll">
+              <a href="matrix.html" target="_self"><h1>Matrix Composition</h1></a>
+            <div class="container">
+                  This page demonstrates the basics of scripting shapes RenderMan scene description (rib) protocol. Writing rib files by hand focuses attention on the use of color, opacity and the fundamental concepts related to xyz coordinate system.
+                The preliminary renders have been done using basic shading so that the geometry can be more easily seen.
+              </div>
+              
+              <div class="container">
+                <a href="images/RomanescoBroccoli_modeling_full.jpg" target="_blank"></a><img src="images/RomanescoBroccoli_modeling_photo.gif" alt="Romanesco Brocolli" width="261" height="196" class="left" style=" margin-right:8px;"/>
+                For this project I have chosen my favorite fractal vegetable <b>Romanesco Broccoli</b> (<i>Brassica oleracea</i>). The flower is composed of spirally arranged segments which are identical copies of the whole flower. The copying process continues <i>ad infinitum</i> as a 3D fractal form. The mathematical beauty and simplicity of this flower never stops to amaze me.<br />
+                
+                Creating this amount of geometry without using Maya or any tool other than Cutter was challenging. However, the only problem was finding the right values for one transformation and repeat it many times.
+              </div>
+
+              <div class="container">
+                <div class="code">
+                    TransformBegin<br />
+                      &nbsp;Cone 2 1.2 360<br />
+                      &nbsp;TransformBegin<br />
+                      &nbsp;&nbsp;Translate 1.6 0.53 -0.1<br />
+                      &nbsp;&nbsp;Rotate -8 1 0 0<br />
+                      &nbsp;&nbsp;Rotate 24 0 1 0<br />
+                      &nbsp;&nbsp;Rotate 15 0 0 1<br />
+                      &nbsp;&nbsp;Scale 0.98 0.98 0.98<br />
+                      &nbsp;&nbsp;Cone 2 1.2 360<br />
+                      &nbsp;&nbsp;&nbsp;TransformBegin<br />
+                      &nbsp;&nbsp;&nbsp;...                    
+                </div>
+                <img src="images/RomanescoBroccoli_modeling_anim.gif" alt="Romanesco Broccoli Fractal Animation Rendering Renderman Level of Detail - Take that Google!" width="196" height="196" class="right" style="margin-left:8px;" />
+                This is the code that I used to create the basic spiral helix from cones. This code (excluding first three lines)is repeated nearly 200 times to create the the first level of cones. At the end of the RIB file, corresponding number of TransformEnd statements is added to complete the nesting. Then, I used that RIB file as an archive that will substitute the cone in the next level of modeling. Before doing that, I had to apply transformations to the archive to align it with the original cone. For that purpose, I made another intermediate archive. After that, it was all about the repeating the same code from above with <b>ReadArchive</b> command instead of <b>Cone</b>. To make the process faster, I used find and replace tool.
+              In the next stage I reduced the amount of geometry by replacing the tiny cones on the top with a single larger cone.              </div>
+              
+              <div class="container">
+              	  <img src="images/sample-rate.gif" alt="Romanesco Broccoli Fractal Animation Rendering Renderman Level of Detail - Take that Google!" width="196" height="196" class="left" style="margin-right:8px;" />
+           	    The image on the left shows depth of field. The effect is setup by adding fallowing statements before camera transformations.
+               	  <div class="code">
+               	  DepthOfField 0.5 0.05 3
+				  </div>
+                  <br /><br /><br /><br />
+                  The statement includes three parameters. <b>f-stop, focal length, focal distance</b>. The graininess is reduced by applying higher pixel sampling rates.
+                <div class="code">
+                  PixelSamples 8 8<br />
+               	  PixelFilter &quot;box&quot; 2 2<br />
+           	      Hider &quot;hidden&quot; &quot;jitter&quot; [0]
+                  </div>
+              </div>
+          
+              <div class="both"></div>
+ 
+               <div class="container">
+              	  <p><a href="images/RomanescoLOD.jpg"><img src="images/RomanescoLOD_thumb.jpg" alt="Romanesco Broccoli Fractal Animation Rendering Renderman Level of Detail - Take that Google!" width="150" height="150" class="left" style="margin-right:8px;" /></a>
+           	        <img src="images/algorithm.png" alt="algorythm broccoly infinite algorithm loop" width="236" height="191" class="right" style=" margin-left:8px;" />
+                Since rendering of four generation broccoli turned out to be extremely slow becouse of huge number of cones (200<sup>3</sup>=1.600.000.000 quadric cones), I decided to employ &quot;level of detail&quot; technique to reduce the amount of geometry. The technique is described in <a href="lod.html"><u>LOD page</u></a>. The image on the left shows three different generations of LOD loops. Although render time was significantly shorter, pre-render time and memory allocation has doubled. It is because entire rib file was generated even though most parts of it were ignored during render. Fortunately, there is a solution for this problem. It is use of Procedural DelayedReadArchive insted of regular ReadArchive. This statement will read an arcive only if it is visible. Moreover, it made possible to create an infinite loop which I wanted to create from the very beginning. It will allow me to create an infinite fractal zoom as shown in the video below. A simplified algorithm of the infinite loop is above.</p>
+           	  </div>
+   	    <div class="container">
+                  <p><a href="images/broccoli.jpg"><img src="images/thumb_broccoli.jpg" alt="Romanesco Broccoli 3d Fractal" width="350" height="420" style=" margin:0 16px;" /></a>
+                      <a href="images/broccoli_stereo.jpg"><img src="images/thumb_broccoli_stereo.jpg" alt="Romanesco Broccoli 3d Fractal Stereo Anagliph" width="350" height="420" /></a></p>
+                  <p>These images are final renders including anaglyph composition made with After Effects. Final output resolution is approximately 3K. Also below is final camera fly-trough. The animation of camera is driven by maya expresion combined with key-frame animation.</p>
+           	  </div>
+               
+              
+		</div>
+        </div>
+        <div id="footer">
+        	<p class="left"><a href="javascript: alert('Division by zero!')" target="_self">WorldEnd</a>
+            <p class="right">Copyright &copy; 2009 <a href="http://aleksandarrodic.com/">Aleksandar Rodić</a>
+        </div>
+<img src="http://aleksandarrodic.com:8440/tracking.gif"/>
+</body>
+</html>
